@@ -1,0 +1,52 @@
+name: build
+on: [pull_request, push]
+
+jobs:
+  job:
+    name: ${{ matrix.config.os }}-build
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        # - {
+        #     name: "Windows Latest MSVC",
+        #     artifact: "Windows-MSVC.tar.xz",
+        #     os: windows-latest,
+        #     build_type: "Release",
+        #     cc: "cl.exe",
+        #     cxx: "cl.exe",
+        #     triplet: "x64-windows-static",
+        #     environment_script: "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat\""
+        #   }
+        - {
+            name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "gcc",
+            cxx: "g++",
+            triplet: "x64-linux",
+            environment_script: "echo building"
+          }
+        # - {
+        #     name: "macOS Latest Clang", artifact: "macOS.tar.xz",
+        #     os: macos-latest,
+        #     build_type: "Release", cc: "clang", cxx: "clang++"
+        #   }
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install, generate and build
+        run: |
+          ${{ matrix.config.environment_script }} && make
+
+      - name: Show content of workspace at its completion
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ matrix.config.os }}
+          path: |
+            ${{ env.OUTPUT_DIR }}
