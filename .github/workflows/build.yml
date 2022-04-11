@@ -28,11 +28,11 @@ jobs:
             triplet: "x64-linux",
             environment_script: "echo building"
           }
-        # - {
-        #     name: "macOS Latest Clang", artifact: "macOS.tar.xz",
-        #     os: macos-latest,
-        #     build_type: "Release", cc: "clang", cxx: "clang++"
-        #   }
+        - {
+            name: "macOS Latest Clang", artifact: "macOS.tar.xz",
+            os: macos-latest,
+            build_type: "Release", cc: "clang", cxx: "clang++"
+          }
 
     steps:
       - uses: actions/checkout@v2
