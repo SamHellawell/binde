@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
       }
     }
   } else {
-     // Expect list of file names from argv
+    // Expect list of file names from argv
     for (int i = 1; i < argc; i++) {
       int result = doDeletion(argv[i], quiet);
       if (result > 0) {
